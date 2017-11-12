@@ -60,10 +60,13 @@ export function determineMatch(currCard,prevCard) {
     	}
     	else{
     		dispatch(showCards(currCard,prevCard,0));
+            try{
     		setTimeout(() => {
   				dispatch(hideCards(currCard,prevCard));
-				}, 500)
-    	}
+				}, 500);
+            }
+            catch(e){dispatch(updateResult(e.message))}            
+        }
     }
 }
 export function createBoard(boardSize,masterSet) {
@@ -97,8 +100,11 @@ export function shuffleBoard(playerBoard){
 
 export function startGame(){
     return function(dispatch) {
-        clearInterval(timer);
-        timer = setInterval(()=>dispatch(updateTimeLeft()),1000);
+        try{   
+            clearInterval(timer); 
+            timer = setInterval(()=>dispatch(updateTimeLeft()),1000);
+        }
+        catch(e){dispatch(updateResult(e.message))}
         dispatch(startTimer());
         dispatch(updateTimeLeft());
     }
@@ -107,7 +113,10 @@ export function startGame(){
 export function endGame(cardHidden,timeLeft){
     return function(dispatch) {
         var resultText = "Congratulations, you won with score:"+timeLeft+"!! please reset to play again!"
-        clearInterval(timer);
+        try{
+            clearInterval(timer);
+        }
+        catch(e){dispatch(updateResult(e.message))}            
         if(cardHidden===0)
         dispatch(updateResult(resultText));   
         else
@@ -116,7 +125,10 @@ export function endGame(cardHidden,timeLeft){
 }
 export function resetGame(gridSize,masterSet){
     return function(dispatch) {
+    try{
     clearInterval(timer);
+    }
+    catch(e){dispatch(updateResult(e.message))}
     dispatch(createBoard(gridSize,masterSet));
     }
 }

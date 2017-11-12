@@ -19,12 +19,13 @@ class GameBoard extends Component {
                 <div className="row justify-content-md-center">
                   <h4>{gameResult}</h4>
                 </div> 
+                <br/><br/>
                 <div className="row justify-content-md-center">
                     <div className="col-md-3">
-                        Difficulty level : <select>
-                          <option value="Easy">6x6 grid</option>
-                          <option value="Medium">8x8 grid</option>
-                          <option value="Hard">10x10 grid</option>
+                        Difficulty level : <select onChange={(e)=>{resetGame(e.target.value,masterSet)}}>
+                          <option value="36">6x6 grid</option>
+                          <option value="64">8x8 grid</option>
+                          <option value="100">10x10 grid</option>
                         </select>
                     </div>
                     <div className="col-md-3">
@@ -38,7 +39,6 @@ class GameBoard extends Component {
                     </div>                                                                                          
                 </div>
                 <br/>
-                <hr/>
                 <div className="row justify-content-md-center">
                     <div className="col-md-8">
                         {

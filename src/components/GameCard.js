@@ -10,7 +10,9 @@ class GameCard extends Component {
         const {prevCard,gameCard,determineMatch} = this.props;
         const cardClass = `${gameCard.status === 'show' ?  "showCard" : "hideCard"}`;
         return (
-            <div className={cardClass} onClick={() => {
+            <div className={cardClass}
+                onClick={gameCard.status === 'show'?"":
+                        () => {
                             determineMatch(gameCard,prevCard);
                         }}>
                 {gameCard.status === 'show'?gameCard.content:""}

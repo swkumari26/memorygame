@@ -1,56 +1,20 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import GameCard from "./GameCard";
-import { bindActionCreators } from 'redux';
-import {startGame,endGame,resetGame} from "../actions/index";
+import Header from "./Header";
+import PlayerBoard from "./PlayerBoard";
 
 class GameBoard extends Component {
     render() {
-        const {prevCard,masterSet,boardSize,gameCardArr,cardHidden,timeLeft,startGame,endGame,gameResult,resetGame} = this.props;
-        var timerInfo = (<div>
-                        {
-                            timeLeft>1?
-                            (parseInt(timeLeft/60,10)+':'+timeLeft%60):
-                            (endGame(cardHidden))
-                        }
-                        </div>);
+        const boardClass = `${this.props.beginGame?  "cardBoard" : "disabledBoard"}`;//this CSS enables the game board when start button is clicked
             return (
-            <div className="container-fluid">
-                <div className="row justify-content-md-center">
-                  <h4>{gameResult}</h4>
-                </div> 
-                <br/><br/>
-                <div className="row justify-content-md-center">
-                    <div className="col-md-3">
-                        Difficulty level : <select onChange={(e)=>{resetGame(e.target.value,masterSet)}}>
-                          <option value="36">6x6 grid</option>
-                          <option value="64">8x8 grid</option>
-                          <option value="100">10x10 grid</option>
-                        </select>
-                    </div>
-                    <div className="col-md-3">
-                        <button className='btn btn-primary' onClick={()=>{startGame();}}>Start</button>
-                    </div>   
-                    <div className="col-md-3">
-                        <button className='btn btn-primary' onClick={()=>{resetGame(boardSize,masterSet);}}>Reset</button>
-                    </div>    
-                    <div className="col-md-3">
-                        Timer: {timerInfo}                      
-                    </div>                                                                                          
-                </div>
-                <br/>
-                <div className="row justify-content-md-center">
-                    <div className="col-md-8">
+                <div className="container">
+                    <div className="row justify-content-md-center"> 
+                        <Header/>
+                    </div>             
+                <div className={boardClass}>
+                    <div className="row justify-content-md-center">
                         {
-                            gameCardArr.map((gameCard,index) => {
-                                return(
-                                    <GameCard
-                                        key={index}
-                                        gameCard={gameCard}
-                                        prevCard={prevCard}
-                                    />
-                                );
-                            })
+                            <PlayerBoard/>
                         }
                     </div>
                 </div>
@@ -58,28 +22,9 @@ class GameBoard extends Component {
         );
     }
 }
-
-
 function mapStateToProps(state) {
-    const gameCardArr = Object.keys(state.playerBoard).map((gameCardIndex) => (
-        {
-            'index':gameCardIndex,
-            'content' : state.playerBoard[gameCardIndex].content,
-            'status' : state.playerBoard[gameCardIndex].status,
-        }
-    ));
-    const prevCard = state.prevCard;
-    const cardHidden = state.cardHidden;
-    const gameResult = state.gameResult;
-    const timeLeft = state.timeLeft;
-    const masterSet = state.masterSet;
-    const boardSize = state.boardSize;
-    return {gameCardArr,prevCard,masterSet,cardHidden,timeLeft,gameResult,boardSize};
+    const beginGame = state.beginGame;
+    return {beginGame};
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        ...bindActionCreators({startGame,endGame,resetGame},dispatch)
-    };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);  
+export default connect(mapStateToProps, null)(GameBoard);

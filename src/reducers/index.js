@@ -1,11 +1,13 @@
 const initialState = {
     masterSet:['1','2','3','4','5','6','7','8','9','0'],
     playerBoard:{},
-    timeLeft:300,
+    timeLeft:null,
     prevCard: {index:null,content:null},
     cardHidden:null,
     gameResult:null,
-    boardSize:null
+    boardSize:null,
+    gameOver:false,
+    beginGame:false
 };
 const gameBoard = (state = initialState, action) => {
 
@@ -17,8 +19,8 @@ const gameBoard = (state = initialState, action) => {
                cardHidden:state.cardHidden-action.noCardRevealed,
                 playerBoard:{
                 ...state.playerBoard,
-               [action.currCard.index]:{content:action.currCard.content,status:'show'},
-               [action.prevCard.index]:{content:action.prevCard.content,status:'show'},
+               [action.currCard.index]:{content:action.currCard.content,status:'show',clickable:'false'},
+               [action.prevCard.index]:{content:action.prevCard.content,status:'show',clickable:'false'},
              }
            };
 
@@ -48,7 +50,9 @@ const gameBoard = (state = initialState, action) => {
                 playerBoard:action.playerBoard,
                 boardSize:action.boardSize,
                 cardHidden:action.boardSize,
-                timeLeft:300
+                beginGame:false,
+                timeLeft:300,
+                gameResult:null
            };    
         case 'UPDATE_TIME_LEFT' :
            return {
@@ -58,12 +62,15 @@ const gameBoard = (state = initialState, action) => {
         case 'TIMER_START' :
            return {
               ...state,
-              timeLeft: 300
+              timeLeft: 300,
+              beginGame:true
            };                               
-        case 'RESET_BOARD' :
+        case 'UPDATE_RESULT' :
            return {
-              ...state,
-                gameResult:action.gameResult
+              ...state,                                
+                gameResult:action.gameResult,
+                gameOver:true,
+                beginGame:false
            };                                                 
 
         default :

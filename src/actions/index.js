@@ -37,9 +37,9 @@ export function updateTimeLeft() {
     }
 }
 
-export function resetBoard(gameResult) {
+export function updateResult(gameResult) {
     return {
-        type : 'RESET_BOARD',
+        type : 'UPDATE_RESULT',
         gameResult
     }
 }
@@ -104,13 +104,14 @@ export function startGame(){
     }
 }
 
-export function endGame(cardHidden){
+export function endGame(cardHidden,timeLeft){
     return function(dispatch) {
+        var resultText = "Congratulations, you won with score:"+timeLeft+"!! please reset to play again!"
         clearInterval(timer);
         if(cardHidden===0)
-        dispatch(resetBoard("yeyyy Congratulations, you won!!"));   
+        dispatch(updateResult(resultText));   
         else
-        dispatch(resetBoard("Sorry you lost, please try again!!"))
+        dispatch(updateResult("Time out, please reset and try again!!"));
     }
 }
 export function resetGame(gridSize,masterSet){

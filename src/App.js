@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 
 class App extends Component {
     componentWillMount(){
-      this.props.createBoard(6,this.props.masterSet);
+      this.props.createBoard(36,this.props.masterSet);
     }	
     render() {
         return (
